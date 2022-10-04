@@ -149,6 +149,7 @@ http {
         require("swutil").set_randomseed()
         require("client"):startBackendTimer(os.getenv("SW_BACKEND_SERVERS"))
         require("swutil").disable_tablepool()
+
     }
 
     {{/* Enable the real_ip module only if we use either X-Forwarded headers or Proxy Protocol. */}}
@@ -378,7 +379,7 @@ http {
     # $ingress_name
     # $service_name
     # $service_port
-    log_format upstreaminfo {{ if $cfg.LogFormatEscapeNone }}escape=none {{ else if $cfg.LogFormatEscapeJSON }}escape=json {{ end }}'{{ $cfg.LogFormatUpstream }}';
+    log_format upstreaminfo {{ if $cfg.LogFormatEscapeJSON }}escape=json {{ end }}'{{ $cfg.LogFormatUpstream }}';
 
     {{/* map urls that should not appear in access.log */}}
     {{/* http://nginx.org/en/docs/http/ngx_http_log_module.html#access_log */}}
@@ -1256,7 +1257,7 @@ stream {
                 plugins.run()
 
                 -- Skywalking
-                require("tracer"):prepareForReport()
+                require("tracer"):prepareForReport()                
 
             }
 
